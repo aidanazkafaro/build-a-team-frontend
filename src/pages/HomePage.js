@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Footer from '../components/Footer';
 import { ResponsiveNavBar } from '../components/Navbar';
 
 const HomePage = () => {
@@ -10,6 +11,8 @@ const HomePage = () => {
   return (
     <>
       <ResponsiveNavBar />
+      <Footer />
+
     </>
   );
 };

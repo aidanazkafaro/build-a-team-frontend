@@ -9,7 +9,6 @@ const SignUpPage = () => {
       <ResponsiveNavBar />
       <SignUp />
       <Footer />
-
     </>
   );
 };
