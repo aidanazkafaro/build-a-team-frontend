@@ -1,62 +1,81 @@
-import React from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Footer from "./Footer";
+import { ResponsiveNavBar } from "./Navbar";
+const axios = require("axios");
 
 const SignUp = () => {
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
+  const nav = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
 
-    let email = e.target.elements.email?.value;
-    let password = e.target.elements.password?.value;
+  const onSubmitFormSignUp = async (e) => {
+    e.preventDefault(); //prevent refresh
 
-    console.log(email, password);
+    const body = { username, password };
+    console.log(body)
+    axios
+      .post("http://localhost:8000/register", {
+        username: body.username,
+        password: body.password,
+      })
+      .then(function (response) {
+        console.log(response);
+        nav("/signin");
+      })
+      .catch(function (error) {
+        alert("Failed to sign up your account.")
+        console.error(error);
+      });
   };
   return (
-    <div className="h-screen flex bg-gray-bg1 -mt-20">
-      <div className="w-full max-w-md m-auto bg-white rounded-lg border border-primaryBorder shadow-default py-10 px-16">
-        <h1 className="text-2xl font-medium text-primary mt-4 mb-12 text-center uppercase">
-          Sign up start building a winning team
-        </h1>
+    <>
+      <ResponsiveNavBar isLoggedIn={false} />
 
-        <form onSubmit={handleFormSubmit}>
-          <div>
-            <label htmlFor="email">Username</label>
-            <input
-              type="username"
-              className={`w-full p-2 text-primary border-2 focus:border-black rounded-md outline-none text-sm transition duration-300 ease-in-out mb-4`}
-              id="username"
-              placeholder="Username"
-            />
-          </div>
-          <div>
-            <label htmlFor="email">Email</label>
-            <input
-              type="email"
-              className={`w-full p-2 text-primary border-2 focus:border-black rounded-md outline-none text-sm transition duration-300 ease-in-out mb-4`}
-              id="email"
-              placeholder="Email"
-            />
-          </div>
-          <div>
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              className={`w-full p-2 text-primary border-2 focus:border-black rounded-md outline-none text-sm transition duration-500 ease-in-out mb-4`}
-              id="password"
-              placeholder="Password"
-            />
-          </div>
+      <div className="h-screen flex bg-gray-bg1 -mt-20">
+        <div className="w-full max-w-md m-auto bg-white rounded-lg border border-primaryBorder shadow-default py-10 px-16">
+          <h1 className="text-2xl font-medium text-primary mt-4 mb-12 text-center uppercase">
+            Sign up start building a winning team
+          </h1>
 
-          <div className="flex justify-center items-center mt-6">
-          <a
-              key="SignUp"
-              className="no-underline text-white rounded-lg font-semibold  active:bg-gray-500 bg-black py-2 px-3 transition duration-75 ease-in-ou"
-              href={"CreateTeam"}
-            >
-              Register
-            </a>
-          </div>
-        </form>
+          <form onSubmit={onSubmitFormSignUp}>
+            <div>
+              <label htmlFor="text">Username</label>
+              <input
+                type="text"
+                className={`w-full p-2 text-primary border-2 focus:border-black rounded-md outline-none text-sm transition duration-300 ease-in-out mb-4`}
+                id="username"
+                placeholder="Username"
+                onChange={(e) => setUsername(e.target.value)}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="password">Password</label>
+              <input
+                type="password"
+                className={`w-full p-2 text-primary border-2 focus:border-black rounded-md outline-none text-sm transition duration-500 ease-in-out mb-4`}
+                id="password"
+                placeholder="Password"
+                onChange={(e) => setPassword(e.target.value)}
+              />
+            </div>
+
+            <div className="flex justify-center items-center mt-6">
+              <button
+                key="SignUp"
+                className="no-underline text-white rounded-lg font-semibold  active:bg-gray-500 bg-black py-2 px-3 transition duration-75 ease-in-ou"
+                href={"CreateTeam"}
+                type="submit"
+              >
+                Register
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+      <Footer />
+    </>
   );
 };
 

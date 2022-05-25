@@ -4,16 +4,12 @@ import HeroArea from "../components/HeroArea";
 import Footer from "../components/Footer";
 
 
-const Home = () => {
-  const [isOpen, setIsOpen] = useState(false);
+const Home = ({isLoggedIn, setIsLoggedIn}) => {
 
-  const toggle = () => {
-    setIsOpen(!isOpen);
-  };
   return (
     <>
-      <ResponsiveNavBar />
-      <HeroArea />
+      <ResponsiveNavBar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      <HeroArea isLoggedIn={isLoggedIn} />
       <Footer/>
     </>
   );

@@ -3,7 +3,6 @@ import { Link } from "react-router-dom";
 // import heroBackground from '../assets/img/hero-bg.jpg'
 // components
 
-
 export default function HeroArea() {
   return (
     <>
@@ -24,24 +23,25 @@ export default function HeroArea() {
           <div className="container relative mx-auto">
             <div className="items-center flex flex-wrap">
               <div className="w-full lg:w-6/12 px-4 ml-auto mr-auto text-center">
-                <div className="pr-12">
+                <div className="">
                   <h1 className="text-white font-bold text-5xl">
                     Build A Winning Team.
                   </h1>
                   <p className="mt-4 text-lg font-light text-white">
-                    Build "A" Team lets you arrange and organize your Football Team to achieve the maximum potential.  
+                    Build "A" Team lets you arrange and organize your Football
+                    Team to achieve the maximum potential.
                   </p>
                   <Link
-                  to="/auth/login"
-                  className="text-sm py-2 px-4 font-semibold block w-full whitespace-nowrap bg-transparent text-black"
-                >
-                  <button
-                    className="mt-10 bg-white text-black active:bg-gray-400 text-sm font-bold uppercase px-4 py-4 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
-                    type="button"
+                    to="/SignIn"
+                    className="text-sm py-2 px-4 font-semibold block w-full whitespace-nowrap bg-transparent text-black"
                   >
-                    Get Started
-                  </button>
-                </Link>
+                    <button
+                      className="mt-10 bg-white text-black active:bg-gray-400 text-sm font-bold uppercase px-4 py-4 rounded outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                      type="button"
+                    >
+                      Get Started
+                    </button>
+                  </Link>
                 </div>
               </div>
             </div>
@@ -67,7 +67,6 @@ export default function HeroArea() {
           </div>
         </div>
       </main>
-      
     </>
   );
 }
