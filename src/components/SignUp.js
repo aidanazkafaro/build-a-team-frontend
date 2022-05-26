@@ -2,7 +2,9 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "./Footer";
 import { ResponsiveNavBar } from "./Navbar";
-const axios = require("axios");
+import axios from "axios";
+
+//axios.defaults.withCredentials = true
 
 const SignUp = () => {
   const nav = useNavigate();

@@ -1,13 +1,38 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "./Footer";
 import { ResponsiveNavBar } from "./Navbar";
-const axios = require("axios");
+import axios from "axios";
 
-const SignIn = ({isLoggedIn, setIsLoggedIn}) => {
+//axios.defaults.withCredentials = true
+
+const SignIn = ({ isLoggedIn, setIsLoggedIn }) => {
   const nav = useNavigate();
   const [username, setUsername] = useState("pepguardiola");
   const [password, setPassword] = useState("mancity");
+  //const [isLoading, setIsLoading] = useState(true);
+
+  // useEffect(() => {
+  //   getSession();
+  //   // ⬇ This calls my get request from the server
+
+  // }, []);
+
+  // const getSession = async (e) => {
+  //   //e.preventDefault(); //prevent refresh
+
+  //   axios
+  //     .get("http://localhost:8000/login", {headers: {'Content-Type': 'application/json'}, withCredentials: true})
+  //     .then(function (response) {
+  //       console.log('GETTING SESSION DATA FROM SERVER')
+  //       console.log(response.data);
+  //       // setTeamProfile(response);
+  //     })
+  //     .catch(function (error) {
+  //       // alert("Can't found your team")
+  //       console.error(error);
+  //     });
+  // };
 
   const onSubmitForm = async (e) => {
     e.preventDefault(); //prevent refresh
@@ -15,17 +40,25 @@ const SignIn = ({isLoggedIn, setIsLoggedIn}) => {
     const body = { username, password };
 
     axios
-      .post("http://localhost:8000/login", {
-        username: body.username,
-        password: body.password,
-      })
+      .post(
+        "http://localhost:8000/login",
+        {
+          username: body.username,
+          password: body.password,
+        },
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      )
       .then(function (response) {
-        console.log(response);
+        console.log(response.data);
         setIsLoggedIn(true);
-        nav("/profilepage");
+        nav("/TeamProfile");
       })
       .catch(function (error) {
-        alert("Can't found your account.")
+        alert("Can't find your account.");
+        nav("/SignIn");
         console.error(error);
       });
   };
