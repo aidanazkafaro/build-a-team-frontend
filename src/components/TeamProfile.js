@@ -58,7 +58,15 @@ const TeamProfile = ({ isLoggedIn }) => {
   };
 
   if (!hasilGetPlayer || !ReactSession.get("username")) {
-    return "Loading";
+    return (
+      <>
+        <div class="grid place-items-center h-screen">
+          <div class="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full" role="status">
+            <span class="visually-hidden">Loading...</span>
+          </div>
+        </div>
+      </>
+    )
   }
 
   return (
@@ -70,7 +78,7 @@ const TeamProfile = ({ isLoggedIn }) => {
         </h1>
 
         <div>
-          
+
         </div>
         <div>
           <PlayerTable dataTim={hasilGetPlayer} />
