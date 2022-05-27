@@ -1,9 +1,11 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { ReactSession } from 'react-client-session';
+
 
 const axios = require("axios");
 
-export const ResponsiveNavBar = ({ isLoggedIn, setIsLoggedIn }) => {
+export const ResponsiveNavBar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const nav = useNavigate();
 
@@ -14,12 +16,12 @@ export const ResponsiveNavBar = ({ isLoggedIn, setIsLoggedIn }) => {
       .get("http://localhost:8000/logout")
       .then(function (response) {
         console.log(response);
-        console.log(`isLoggedIn = ${isLoggedIn}`)
-        setIsLoggedIn(!isLoggedIn);
+        ReactSession.set("userLoggedIn", false)
+        console.log(`userLoggedIn = ${ReactSession.get("userLoggedIn") }`)
         nav("/");
       })
       .catch(function (error) {
-        //alert("Can't found your account.")
+        alert("Log out failed.")
         console.error(error);
       });
   };
@@ -66,7 +68,7 @@ export const ResponsiveNavBar = ({ isLoggedIn, setIsLoggedIn }) => {
   );
 
   // 
-  const Navbar = ({ isLoggedIn, menuOpen, setMenuOpen }) => (
+  const Navbar = ({ menuOpen, setMenuOpen }) => (
     <div
       className={`md:px-40 lg:px-20 flex items-center justify-between p-4 border-b-2 border-gray-100`}
     >
@@ -78,7 +80,7 @@ export const ResponsiveNavBar = ({ isLoggedIn, setIsLoggedIn }) => {
           Build "A" Team
         </a>
       </div>
-      <nav className="hidden md:block space-x-6">{isLoggedIn ? navLinksLoggedIn : navLinks}</nav>
+      <nav className="hidden md:block space-x-6">{ReactSession.get("userLoggedIn") ? navLinksLoggedIn : navLinks}</nav>
       <button
         type="button"
         aria-label="Toggle mobile menu"
@@ -120,20 +122,10 @@ export const ResponsiveNavBar = ({ isLoggedIn, setIsLoggedIn }) => {
     </div>
   );
 
-  if (!isLoggedIn) {
-    
-    return (
-      <div className="bg-white">
-        <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
-        {menuOpen && <MobileMenu>{navLinks}</MobileMenu>}
-      </div>
-    );
-  } else {
     return (
       <div className="bg-white">
         <Navbar menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
         {menuOpen && <MobileMenu>{navLinksLoggedIn}</MobileMenu>}
       </div>
     );
-  }
 };

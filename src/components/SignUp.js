@@ -4,8 +4,6 @@ import Footer from "./Footer";
 import { ResponsiveNavBar } from "./Navbar";
 import axios from "axios";
 
-//axios.defaults.withCredentials = true
-
 const SignUp = () => {
   const nav = useNavigate();
   const [username, setUsername] = useState("");
@@ -32,7 +30,7 @@ const SignUp = () => {
   };
   return (
     <>
-      <ResponsiveNavBar isLoggedIn={false} />
+      <ResponsiveNavBar  />
 
       <div className="h-screen flex bg-gray-bg1 -mt-20">
         <div className="w-full max-w-md m-auto bg-white rounded-lg border border-primaryBorder shadow-default py-10 px-16">

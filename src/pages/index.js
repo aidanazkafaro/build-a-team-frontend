@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React from "react";
 import { ResponsiveNavBar } from "../components/Navbar";
 import HeroArea from "../components/HeroArea";
 import Footer from "../components/Footer";
+import { ReactSession } from "react-client-session";
 
 
-const Home = ({isLoggedIn, setIsLoggedIn}) => {
+const Home = () => {
+
+  ReactSession.set("userLoggedIn", false)
+
 
   return (
     <>
-      <ResponsiveNavBar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-      <HeroArea isLoggedIn={isLoggedIn} />
+      <ResponsiveNavBar  />
+      <HeroArea  />
       <Footer/>
     </>
   );

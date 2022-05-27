@@ -4,14 +4,16 @@ import Footer from "./Footer";
 import { ResponsiveNavBar } from "./Navbar";
 import { ReactSession } from "react-client-session";
 import PlayerTable from "./PlayerTable";
+import AddPlayers from "../pages/AddPlayers";
 
-const TeamProfile = ({ isLoggedIn }) => {
+const TeamProfile = () => {
   const [hasilGetPlayer, setHasilGetPlayer] = useState(null);
-
+  const [hasPlayers, setHasPlayers] = useState(false);
+  
   //console.log(teamProfile);
   useEffect(() => {
     getSession();
-    if (ReactSession.get("id_tim") != null) {
+    if (ReactSession.get("id_tim") !== undefined) {
       getPlayer();
       // setTimeout(2000);
       ReactSession.set("hasilGetPlayer", hasilGetPlayer);
@@ -49,7 +51,7 @@ const TeamProfile = ({ isLoggedIn }) => {
         //PlayerTable(response.data);
         //hasilGetPlayer = response.data;
         setHasilGetPlayer(response.data);
-        console.log(response.data);
+        //console.log(response.data);
       })
       .catch(function (error) {
         // alert("Can't found your team")
@@ -63,17 +65,15 @@ const TeamProfile = ({ isLoggedIn }) => {
 
   return (
     <>
-      <ResponsiveNavBar isLoggedIn={isLoggedIn} />
-      <div className="w-full text-left h-screen p-10">
+      <ResponsiveNavBar />
+      <div className="w-full text-left h-fit p-10 mx-auto">
         <h1 className="text-bold text-4xl">
           Welcome, {ReactSession.get("username")}!
         </h1>
 
-        <div>
-          
-        </div>
-        <div>
-          <PlayerTable dataTim={hasilGetPlayer} />
+        <div className="w-full h-fit">
+          {hasPlayers ? <PlayerTable dataTim={hasilGetPlayer} /> : <AddPlayers />}
+          {/* <PlayerTable dataTim={hasilGetPlayer} /> */}
         </div>
       </div>
 

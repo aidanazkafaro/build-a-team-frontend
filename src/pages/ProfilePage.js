@@ -3,10 +3,9 @@ import { useEffect, useState } from "react";
 import { Routes, Route, Link, Navigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import { ResponsiveNavBar } from "../components/Navbar";
- 
-//axios.defaults.withCredentials = true
+import { ReactSession } from 'react-client-session';
 
-const ProfilePage = ({isLoggedIn, setIsLoggedIn}) => {
+const ProfilePage = () => {
 
 
   // useEffect(() => {
@@ -50,12 +49,12 @@ const ProfilePage = ({isLoggedIn, setIsLoggedIn}) => {
 
   // redirect ke index apabila ada user belum login 
   // yang ingin akses profile page
-  if (!isLoggedIn) {
+  if (!ReactSession.get("userLoggedIn")) {
     return <Navigate to="/" replace />;
   }
   return (
     <>
-      <ResponsiveNavBar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
+      <ResponsiveNavBar  />
       
       <Footer />
 
