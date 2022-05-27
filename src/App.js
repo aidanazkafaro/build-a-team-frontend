@@ -7,32 +7,48 @@ import ProtectedRoute from "./ProtectedRoute";
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import TeamProfile from "./components/TeamProfile";
-import { ReactSession } from 'react-client-session';
+import { ReactSession } from "react-client-session";
+import LandingPage from "./pages/LandingPage";
+import CreateTeam from "./pages/CreateTeam";
 
 ReactSession.setStoreType("localStorage");
 export const UserContext = React.createContext(false);
 
 function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Index isLoggedIn={isLoggedIn} />} />
-        <Route path="/SignIn" element={<SignIn isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>} />
+        <Route path="/" element={<Index />} />
+        <Route path="/SignIn" element={<SignIn />} />
         <Route path="/SignUp" element={<SignUp />} />
-        <Route path="/teamProfile" element={<TeamProfile isLoggedIn={isLoggedIn}/>} />
-        {/* <Route path="/gudang" element={<Gudang />} /> */}
+        <Route path="/LandingPage" element={<LandingPage />} />
         <Route
-          path="/ProfilePage"
+          path="/CreateTeam"
           element={
-            <ProtectedRoute isLoggedIn={isLoggedIn}>
-              <ProfilePage isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn}/>
+            <ProtectedRoute>
+              <CreateTeam />
             </ProtectedRoute>
           }
         />
-                {/* <Route path="*" element={<Index />} /> */}
+        <Route
+          path="/ProfilePage"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/teamProfile"
+          element={
+            <ProtectedRoute>
+              <TeamProfile />
+            </ProtectedRoute>
+          }
+        />
+        {/* <Route path="*" element={<Index />} /> */}
 
+        <Route path="*" element={<Index />} />
       </Routes>
     </Router>
   );

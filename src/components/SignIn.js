@@ -1,38 +1,20 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "./Footer";
 import { ResponsiveNavBar } from "./Navbar";
 import axios from "axios";
+import { ReactSession } from "react-client-session";
 
 //axios.defaults.withCredentials = true
 
-const SignIn = ({ isLoggedIn, setIsLoggedIn }) => {
+const SignIn = () => {
   const nav = useNavigate();
-  const [username, setUsername] = useState("pepguardiola");
-  const [password, setPassword] = useState("mancity");
-  //const [isLoading, setIsLoading] = useState(true);
-
-  // useEffect(() => {
-  //   getSession();
-  //   // ⬇ This calls my get request from the server
-
-  // }, []);
-
-  // const getSession = async (e) => {
-  //   //e.preventDefault(); //prevent refresh
-
-  //   axios
-  //     .get("http://localhost:8000/login", {headers: {'Content-Type': 'application/json'}, withCredentials: true})
-  //     .then(function (response) {
-  //       console.log('GETTING SESSION DATA FROM SERVER')
-  //       console.log(response.data);
-  //       // setTeamProfile(response);
-  //     })
-  //     .catch(function (error) {
-  //       // alert("Can't found your team")
-  //       console.error(error);
-  //     });
-  // };
+  const [username, setUsername] = useState("aidanregister");
+  const [password, setPassword] = useState("aidanregister");
+  ReactSession.set("userLoggedIn", false);
+  ReactSession.set("id_tim", null);
+  ReactSession.set("username", null);
+  ReactSession.set("user_id", null);
 
   const onSubmitForm = async (e) => {
     e.preventDefault(); //prevent refresh
@@ -53,8 +35,13 @@ const SignIn = ({ isLoggedIn, setIsLoggedIn }) => {
       )
       .then(function (response) {
         console.log(response.data);
-        setIsLoggedIn(true);
-        nav("/TeamProfile");
+        ReactSession.set("userLoggedIn", true);
+        if (ReactSession.get("id_tim") === undefined) {
+          console.log("GAPUNYA ID TIM COKKK")
+          nav("/LandingPage");
+        } else {
+          nav("/TeamProfile");
+        }
       })
       .catch(function (error) {
         alert("Can't find your account.");
@@ -64,8 +51,7 @@ const SignIn = ({ isLoggedIn, setIsLoggedIn }) => {
   };
   return (
     <>
-      <ResponsiveNavBar isLoggedIn={isLoggedIn} setIsLoggedIn={setIsLoggedIn} />
-      
+      <ResponsiveNavBar />
       <div className="h-screen flex bg-gray-bg1 -mt-20">
         <div className="w-full max-w-md m-auto bg-white rounded-lg border border-primaryBorder shadow-default py-10 px-16">
           <h1 className="text-2xl font-medium text-primary mt-4 mb-12 text-center uppercase">

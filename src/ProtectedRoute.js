@@ -1,6 +1,8 @@
 import { Navigate } from "react-router-dom";
-const ProtectedRoute = ({ isLoggedIn, children }) => {
-  if (!isLoggedIn) {
+import { ReactSession } from 'react-client-session';
+
+const ProtectedRoute = ({ children }) => {
+  if (!ReactSession.get("userLoggedIn")) {
     return <Navigate to="/" replace />;
   }
   return children;
