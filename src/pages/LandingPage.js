@@ -9,11 +9,26 @@ const LandingPage = () => {
   const nav = useNavigate();
   //console.log(teamProfile);
   useEffect(() => {
-    getSession();
+    axios
+    .get("http://localhost:8000/login", {
+      headers: { "Content-Type": "application/json" },
+      withCredentials: true,
+    })
+    .then(function (response) {
+      console.log("GETTING SESSION DATA FROM SERVER");
+      console.log(response.data);
+      ReactSession.set("username", response.data.username);
+      ReactSession.set("user_id", response.data.user_id);
+      ReactSession.set("id_tim", response.data.id_tim);
+    })
+    .catch(function (error) {
+      // alert("Can't found your team")
+      console.error(error);
+    });
     console.log("i fire once");
   }, []);
 
-  const getSession = (e) => {
+  const getSession = async (e) => {
     axios
       .get("http://localhost:8000/login", {
         headers: { "Content-Type": "application/json" },

@@ -70,7 +70,7 @@ export const ResponsiveNavBar = () => {
   // 
   const Navbar = ({ menuOpen, setMenuOpen }) => (
     <div
-      className={`md:px-40 lg:px-20 flex items-center justify-between p-4 border-b-2 border-gray-100`}
+      className={`md:px-20 lg:px-20 flex items-center justify-between p-4 border-b-2 border-gray-100`}
     >
       <div className="flex items-center">
         <a

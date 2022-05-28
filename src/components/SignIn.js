@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "./Footer";
 import { ResponsiveNavBar } from "./Navbar";
@@ -9,12 +9,38 @@ import { ReactSession } from "react-client-session";
 
 const SignIn = () => {
   const nav = useNavigate();
-  const [username, setUsername] = useState("aidanregister");
-  const [password, setPassword] = useState("aidanregister");
-  ReactSession.set("userLoggedIn", false);
-  ReactSession.set("id_tim", null);
-  ReactSession.set("username", null);
-  ReactSession.set("user_id", null);
+  const [username, setUsername] = useState("pepguardiola");
+  const [password, setPassword] = useState("mancity");
+  
+  useEffect(() => {
+    //getSession();
+    // ReactSession.set("userLoggedIn", false);
+    // ReactSession.set("id_tim", null);
+    // ReactSession.set("username", null);
+    // ReactSession.set("user_id", null);
+
+    console.log("i fire once");
+  }, []);
+
+  // const getSession = async (e) => {
+  //   axios
+  //     .get("http://localhost:8000/login", {
+  //       headers: { "Content-Type": "application/json" },
+  //       withCredentials: true,
+  //     })
+  //     .then(function (response) {
+  //       console.log("GETTING SESSION DATA FROM SERVER");
+  //       console.log(response.data);
+  //       ReactSession.set("username", response.data.username);
+  //       ReactSession.set("user_id", response.data.user_id);
+  //       ReactSession.set("id_tim", response.data.id_tim);
+  //       // if (ReactSession.get(""))
+  //     })
+  //     .catch(function (error) {
+  //       // alert("Can't found your team")
+  //       console.error(error);
+  //     });
+  // };
 
   const onSubmitForm = async (e) => {
     e.preventDefault(); //prevent refresh
@@ -36,12 +62,22 @@ const SignIn = () => {
       .then(function (response) {
         console.log(response.data);
         ReactSession.set("userLoggedIn", true);
+        ReactSession.set("username", response.data.username);
+        ReactSession.set("user_id", response.data.user_id);
+        ReactSession.set("id_tim", response.data.id_tim);
+        console.log("ID TIM NIH DI BAWAHHH")
+        console.log(ReactSession.get("id_tim"));
         if (ReactSession.get("id_tim") === undefined) {
-          console.log("GAPUNYA ID TIM COKKK")
-          nav("/LandingPage");
-        } else {
-          nav("/TeamProfile");
+          console.log("GA PUNYA TIM");
+          //nav("/LandingPage");
+          window.location.href = '/LandingPage';
+        } 
+        else if (ReactSession.get("id_tim") !== undefined) {
+          console.log("PUNYA ID TIM NIHH");
+          //nav("/TeamProfile");
+          window.location.href = '/TeamProfile';
         }
+
       })
       .catch(function (error) {
         alert("Can't find your account.");

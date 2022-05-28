@@ -73,83 +73,82 @@ const CreateTeam = () => {
       )
       .then(function (response) {
         console.log(response.data);
-        if (ReactSession.get("id_tim") === undefined) {
-          console.log("MASIH GAPUNYA TIM");
-          nav("/CreateTeam");
-        } else {
-          nav("/TeamProfile");
-        }
       })
       .catch(function (error) {
         //alert("Can't find your account.");
-        nav("/CreateTeam");
+
         console.error(error);
       });
+
+      nav("/TeamProfile")
   };
 
   return (
     <>
       <ResponsiveNavBar />
-      <div className="py-5 px-10 w-1/2 justify-center">
-        <Box sx={{ display: "flex", flexWrap: "wrap" }}>
-          <div>
-            <FormControl fullWidth sx={{ m: 1 }}>
-              <TextField
-                label="Team Name"
-                id="outlined-start-adornment"
-                sx={{ m: 1, width: "50ch" }}
-                value={createTeamData.nama_tim}
-                onChange={handleChange("nama_tim")}
-                // InputProps={{
-                //   startAdornment: <InputAdornment position="start">kg</InputAdornment>,
-                // }}
-              />
-            </FormControl>
-            <FormControl fullWidth sx={{ m: 1 }}>
-              <TextField
-                label="Manager Name"
-                id="outlined-start-adornment"
-                sx={{ m: 1, width: "50ch" }}
-                value={createTeamData.manager}
-                onChange={handleChange("manager")}
-                // InputProps={{
-                //   startAdornment: <InputAdornment position="start">kg</InputAdornment>,
-                // }}
-              />
-            </FormControl>
-            <FormControl fullWidth sx={{ m: 1 }}>
-              <TextField
-                id="filled-select-currency-native"
-                select
-                label="Formation"
-                sx={{ m: 1, width: "50ch" }}
-                value={createTeamData.formasis}
-                onChange={handleChange("formasis")}
-                SelectProps={{
-                  native: true,
-                }}
-                helperText="Formation can be changed later on"
-                // variant="filled"
+      <div className="h-screen">
+        <h1>Let's create your team!</h1>
+        <div className=" py-5 pt-10 w-1/2 justify-center">
+          <Box sx={{ display: "flex", flexWrap: "wrap" }}>
+            <div>
+              <FormControl fullWidth sx={{ m: 1 }}>
+                <TextField
+                  label="Team Name"
+                  id="outlined-start-adornment"
+                  sx={{ m: 1, width: "50ch" }}
+                  value={createTeamData.nama_tim}
+                  onChange={handleChange("nama_tim")}
+                  // InputProps={{
+                  //   startAdornment: <InputAdornment position="start">kg</InputAdornment>,
+                  // }}
+                />
+              </FormControl>
+              <FormControl fullWidth sx={{ m: 1 }}>
+                <TextField
+                  label="Manager Name"
+                  id="outlined-start-adornment"
+                  sx={{ m: 1, width: "50ch" }}
+                  value={createTeamData.manager}
+                  onChange={handleChange("manager")}
+                  // InputProps={{
+                  //   startAdornment: <InputAdornment position="start">kg</InputAdornment>,
+                  // }}
+                />
+              </FormControl>
+              <FormControl fullWidth sx={{ m: 1 }}>
+                <TextField
+                  id="filled-select-currency-native"
+                  select
+                  label="Formation"
+                  sx={{ m: 1, width: "50ch" }}
+                  value={createTeamData.formasis}
+                  onChange={handleChange("formasis")}
+                  SelectProps={{
+                    native: true,
+                  }}
+                  helperText="Formation can be changed later on"
+                  // variant="filled"
+                >
+                  {formations.map((option) => (
+                    <option key={option.id} value={option.value}>
+                      {option.value}
+                    </option>
+                  ))}
+                </TextField>
+              </FormControl>
+              <Button
+                variant="contained"
+                onClick={onSubmitForm}
+                href="/TeamProfile"
+                sx={{ ml: 2 }}
               >
-                {formations.map((option) => (
-                  <option key={option.id} value={option.value}>
-                    {option.value}
-                  </option>
-                ))}
-              </TextField>
-            </FormControl>
-            <Button
-              variant="contained"
-              onClick={onSubmitForm}
-              href="/LandingPage"
-              sx={{ ml: 2 }}
-            >
-              Submit Team
-            </Button>
-          </div>
-        </Box>
+                Submit Team
+              </Button>
+            </div>
+          </Box>
+        </div>
+        <Footer />
       </div>
-      <Footer />
     </>
   );
 };

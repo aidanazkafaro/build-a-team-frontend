@@ -10,6 +10,9 @@ import TeamProfile from "./components/TeamProfile";
 import { ReactSession } from "react-client-session";
 import LandingPage from "./pages/LandingPage";
 import CreateTeam from "./pages/CreateTeam";
+import AddPlayers from "./components/AddPlayers";
+import PageAddPlayer from "./pages/PageAddPlayer";
+import ShowPlayer from "./pages/ShowPlayer";
 
 ReactSession.setStoreType("localStorage");
 export const UserContext = React.createContext(false);
@@ -27,6 +30,22 @@ function App() {
           element={
             <ProtectedRoute>
               <CreateTeam />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/PageAddPlayer"
+          element={
+            <ProtectedRoute>
+              <PageAddPlayer />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/ShowPlayer"
+          element={
+            <ProtectedRoute>
+              <ShowPlayer />
             </ProtectedRoute>
           }
         />
