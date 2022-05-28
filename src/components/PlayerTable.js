@@ -48,14 +48,22 @@ const columns = [
 //     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
 // },
 
-export default function PlayerTable( ) {
+export default function PlayerTable() {
+  console.log("MASUK PLAYERTABLE");
+  let dataTimArray = [];
+
   const [selectionModel, setSelectionModel] = React.useState(null);
   const [showCheckbox, setShowCheckbox] = React.useState(false);
 
   const [selectedPlayer, setSelectedPlayer] = React.useState([]);
   const [pageSize, setPageSize] = React.useState(5);
   const [hasilGetPlayer, setHasilGetPlayer] = React.useState(null);
+  const [hasilGetSelectedPlayer, setHasilGetSelectedPlayer] =
+    React.useState(null);
   const [hasPlayers, setHasPlayers] = React.useState(false);
+  const [hasSelectedPlayers, setHasSelectedPlayers] = React.useState(false);
+
+  const [ambilSelectedPlayer, setAmbilSelectedPlayer] = React.useState(false);
 
   React.useEffect(() => {
     getPlayer();
@@ -63,38 +71,71 @@ export default function PlayerTable( ) {
 
   const getPlayer = () => {
     axios
-    .get(
-      "http://localhost:8000/getplayer",
-      { params: { user_id: ReactSession.get("user_id") } },
-      {
-        headers: { "Content-Type": "application/json" },
-        withCredentials: true,
-      }
-    )
-    .then(function (response) {
-      console.log("GETTING PLAYER DATA FROM SERVER");
-      //PlayerTable(response.data);
-      //hasilGetPlayer = response.data;
-      console.log("HASIL GET PLAYER");
-      console.log(response.data);
-      setHasilGetPlayer(response.data);
-      setHasPlayers(true);
-      if (response.data.length === 0) {
-        setHasPlayers(false);
-      } else {
+      .get(
+        "http://localhost:8000/getplayer",
+        { params: { user_id: ReactSession.get("user_id") } },
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      )
+      .then(function (response) {
+        console.log("GETTING PLAYER DATA FROM SERVER");
+        //PlayerTable(response.data);
+        //hasilGetPlayer = response.data;
+        console.log("HASIL GET PLAYER");
+        console.log(response.data);
+        setHasilGetPlayer(response.data);
         setHasPlayers(true);
-      }
+        if (response.data.length === 0) {
+          setHasPlayers(false);
+        } else {
+          setHasPlayers(true);
+        }
 
-      //console.log(response.data);
-    })
-    .catch(function (error) {
-      // alert("Can't found your team")
-      console.error(error);
-    });
-  }
+        //console.log(response.data);
+      })
+      .catch(function (error) {
+        // alert("Can't found your team")
+        console.error(error);
+      });
+  };
 
-  console.log("MASUK PLAYERTABLE");
-  var dataTimArray = [];
+  const getSelectedPlayer = () => {
+    // dataTimArray.splice(0, dataTimArray.length)
+    console.log("MASUK GET SELECTED PLAYER");
+    // setHasilGetPlayer(undefined);
+    // console.log(hasilGetPlayer);
+    axios
+      .get(
+        "http://localhost:8000/getselectedplayer",
+        { params: { id_tim: ReactSession.get("id_tim") } },
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      )
+      .then(function (response) {
+        console.log("GETTING SELECTED PLAYER DATA FROM SERVER");
+        //PlayerTable(response.data);
+        //hasilGetPlayer = response.data;
+        console.log("HASIL GET SELECTED PLAYER");
+        console.log(response.data);
+        setHasilGetPlayer(response.data);
+        setHasPlayers(true);
+        if (response.data.length === 0) {
+          setHasPlayers(false);
+        } else {
+          setHasPlayers(true);
+        }
+
+        //console.log(response.data);
+      })
+      .catch(function (error) {
+        // alert("Can't found your team")
+        console.error(error);
+      });
+  };
 
   const selectToStart = () => {
     axios
@@ -113,6 +154,23 @@ export default function PlayerTable( ) {
       });
   };
 
+  // const updateStatistik = () => {
+  //   axios
+  //     .put("http://localhost:8000/setSelectedPlayer", {
+  //       id_tim: ReactSession.get("id_tim"),
+  //       playerID: selectedPlayer,
+  //     })
+  //     .then(function (response) {
+  //       console.log("HASIL QUERY SET SELECTED PLAYER");
+  //       console.log(response.data);
+  //       //window.location.reload(false);
+  //       getPlayer();
+  //     })
+  //     .catch(function (error) {
+  //       console.error(error);
+  //     });
+  // };
+
   const removeFromStarting = () => {
     axios
       .put("http://localhost:8000/unsetselectedplayer", {
@@ -124,14 +182,28 @@ export default function PlayerTable( ) {
         console.log(response.data);
         //window.location.reload(false);
         getPlayer();
-
       })
       .catch(function (error) {
         console.error(error);
       });
   };
 
-  if ( hasPlayers) {
+  const removeFromTeam = () => {
+    axios
+      .post("http://localhost:8000/deleteplayer", {
+        id_pemain: selectedPlayer,
+      })
+      .then(function (response) {
+        console.log("HASIL QUERY DELETE PLAYER");
+        console.log(response.data);
+        //window.location.reload(false);
+        getPlayer();
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+  if (hasPlayers && hasilGetPlayer.length !== 0) {
     for (let i = 0; i < hasilGetPlayer.length; i++) {
       dataTimArray.push({
         nama: hasilGetPlayer[i].nama,
@@ -161,11 +233,33 @@ export default function PlayerTable( ) {
       <div className="grid grid-cols-6 gap-4 my-5">
         <div className="col-start-1 col-end-5">
           <div className="flex gap-4 justify-start">
-            <Button variant="contained" sx={{ ml: 0 }} href={"PageAddPlayer"} size="small">
+            <Button
+              variant="contained"
+              sx={{ ml: 0 }}
+              href={"PageAddPlayer"}
+              size="small"
+            >
               Add Player
             </Button>
 
-            <Button variant="contained" sx={{ ml: 0 }} href={"PageAddPlayer"} size="small">
+            <Button
+              variant="contained"
+              sx={{ ml: 0 }}
+              size="small"
+              onClick={() => {
+                getPlayer();
+              }}
+            >
+              All Players
+            </Button>
+            <Button
+              variant="contained"
+              sx={{ ml: 0 }}
+              size="small"
+              onClick={() => {
+                getSelectedPlayer();
+              }}
+            >
               Starting XI
             </Button>
           </div>
@@ -210,6 +304,25 @@ export default function PlayerTable( ) {
                   size="small"
                 >
                   REMOVE FROM STARTING XI
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  sx={{ ml: 0 }}
+                  onClick={removeFromTeam}
+                  hidden={true}
+                  size="small"
+                >
+                  REMOVE FROM TEAM
+                </Button>
+                <Button
+                  variant="outlined"
+                  sx={{ ml: 0 }}
+              
+                  hidden={true}
+                  size="small"
+                >
+                  EDIT PLAYER
                 </Button>
               </div>
             </div>

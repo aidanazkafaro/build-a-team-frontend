@@ -55,9 +55,7 @@ const TeamProfile = () => {
         </h1>
 
         <div className="w-full h-fit">
-          {/* {hasPlayers ? <PlayerTable dataTim={hasilGetPlayer} /> : ''} */}
           <PlayerTable />
-          {/* <PlayerTable dataTim={hasilGetPlayer} /> */}
         </div>
       </div>
       <Footer />

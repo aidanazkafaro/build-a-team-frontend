@@ -3,8 +3,10 @@ import { Box } from "@mui/system";
 import axios from "axios";
 import React, { useState } from "react";
 import { ReactSession } from "react-client-session";
+import Footer from "./Footer";
+import { ResponsiveNavBar } from "./Navbar";
 
-const AddPlayers = () => {
+const EditPlayer = ({id_pemain}) => {
   const positions = [
     {
       value: "GK",
@@ -108,7 +110,7 @@ const AddPlayers = () => {
 
   return (
     <>      
-    
+        <ResponsiveNavBar />
       <h1 className="text-2xl my-2 ">
         Let's add players into your team!
       </h1>
@@ -324,218 +326,10 @@ const AddPlayers = () => {
         </Box>
       </div>
       <br></br>
-      {/* <form className="w-full max-w-lg">
-        <h3 className="text-xl my-2 ">Identity</h3>
-        <div className="flex flex-wrap -mx-3 mb-6">
-          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              for="grid-first-name"
-            >
-              Name
-            </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-              id="grid-first-name"
-              type="text"
-              placeholder="Ronaldo"
-              onChange={handleChange("nama")}
-            ></input>
-          </div>
-          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              for="grid-first-age"
-            >
-              Age
-            </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-              id="grid-first-name"
-              type="number"
-              placeholder="28"
-              onChange={handleChange("umur")}
-
-            ></input>
-          </div>
-          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              for="grid-first-height"
-            >
-              Height
-            </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-              id="grid-first-name"
-              type="number"
-              placeholder="cm"
-              onChange={handleChange("tinggi")}
-
-            ></input>
-          </div>
-          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              for="grid-first-weight"
-            >
-              Weight
-            </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-              id="grid-first-name"
-              type="number"
-              placeholder="kg"
-              onChange={handleChange("berat_badan")}
-
-            ></input>
-          </div>
-          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              for="grid-first-palyernumber"
-            >
-              Player Number
-            </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-              id="grid-first-name"
-              type="number"
-              placeholder="7"
-              onChange={handleChange("no_punggung")}
-
-            ></input>
-          </div>
-        </div>
-        <h3 className="text-xl my-2 ">Ability</h3>
-        <div className="flex flex-wrap -mx-3 mb-6">
-          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              for="grid-first-agility"
-            >
-              Agility
-            </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-              id="grid-first-name"
-              type="number"
-              placeholder="0-100"
-              onChange={handleChange("agility")}
-
-            ></input>
-          </div>
-          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              for="grid-first-age"
-            >
-              Defence
-            </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-              id="grid-first-name"
-              type="number"
-              placeholder="0-100"
-              onChange={handleChange("defence")}
-
-            ></input>
-          </div>
-          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              for="grid-first-height"
-            >
-              Passing
-            </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-              id="grid-first-name"
-              type="number"
-              placeholder="0-100"
-              onChange={handleChange("passing")}
-
-            ></input>
-          </div>
-          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              for="grid-first-weight"
-            >
-              Dribbling
-            </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-              id="grid-first-name"
-              type="number"
-              placeholder="0-100"
-              onChange={handleChange("dribbling")}
-
-            ></input>
-          </div>
-          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              for="grid-first-palyernumber"
-            >
-              Stamina
-            </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-              id="grid-first-name"
-              type="number"
-              placeholder="0-100"
-              onChange={handleChange("stamina")}
-
-            ></input>
-          </div>
-          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              for="grid-first-palyernumber"
-            >
-              Speed
-            </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-              id="grid-first-name"
-              type="number"
-              placeholder="0-100"
-              onChange={handleChange("speed")}
-
-            ></input>
-          </div>
-          <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
-            <label
-              className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              for="grid-first-palyernumber"
-            >
-              Shooting
-            </label>
-            <input
-              className="appearance-none block w-full bg-gray-200 text-gray-700 border  rounded py-3 px-4 mb-3 leading-tight focus:outline-none focus:bg-white"
-              id="grid-first-name"
-              type="number"
-              placeholder="0-100"
-              onChange={handleChange("shooting")}
-
-            ></input>
-          </div>
-        </div>
-      </form> */}
-      {/* <Button
-        variant="contained"
-        // onClick={onSubmitForm}
-        href="/TeamProfile"
-        sx={{ ml: 0 }}
-        onClick={onSubmitForm}
-      >
-        Add Player
-      </Button> */}
-      
+      <Footer />
 
     </>
   );
 };
 
-export default AddPlayers;
+export default EditPlayer;

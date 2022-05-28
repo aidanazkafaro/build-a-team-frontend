@@ -7,6 +7,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import TeamProfile from "./components/TeamProfile";
+import EditPlayer from "./components/EditPlayer";
 import { ReactSession } from "react-client-session";
 import LandingPage from "./pages/LandingPage";
 import CreateTeam from "./pages/CreateTeam";
@@ -62,6 +63,14 @@ function App() {
           element={
             <ProtectedRoute>
               <TeamProfile />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/EditPlayer"
+          element={
+            <ProtectedRoute>
+              <EditPlayer />
             </ProtectedRoute>
           }
         />
