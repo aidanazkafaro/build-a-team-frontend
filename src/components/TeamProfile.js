@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 const TeamProfile = () => {
   const [hasilGetPlayer, setHasilGetPlayer] = useState(null);
   const [hasPlayers, setHasPlayers] = useState(false);
+  const [username, setUsername] = useState(null);
 
   //console.log(teamProfile);
   // useEffect(() => {
@@ -63,7 +64,6 @@ const TeamProfile = () => {
 
   useEffect(() => {
     (async () => {
-      
       const requestSession = await axios.get("http://localhost:8000/login", {
         headers: { "Content-Type": "application/json" },
         withCredentials: true,
@@ -71,16 +71,21 @@ const TeamProfile = () => {
       console.log("HASIL REQUEST SESSION DI BAWAH");
       console.log(requestSession);
       ReactSession.set("username", requestSession.data.username);
+      setUsername(requestSession.data.username)
       ReactSession.set("user_id", requestSession.data.user_id);
       ReactSession.set("id_tim", requestSession.data.id_tim);
       console.log("USER ID PAKE REACT SESSION DI BAWAH");
       console.log(ReactSession.get("user_id"));
 
-      const requestPlayer = await axios
-        .get("http://localhost:8000/getplayer", {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        })
+      axios
+        .get(
+          "http://localhost:8000/getplayer",
+          { params: { user_id: ReactSession.get("user_id") } },
+          {
+            headers: { "Content-Type": "application/json" },
+            withCredentials: true,
+          }
+        )
         .then(function (response) {
           console.log("GETTING PLAYER DATA FROM SERVER");
           //PlayerTable(response.data);
@@ -102,7 +107,7 @@ const TeamProfile = () => {
         });
     })();
   }, []);
-  if (!hasilGetPlayer) {
+  if (!hasilGetPlayer || !username ) {
     return (
       <>
         <div className="grid place-items-center h-screen">

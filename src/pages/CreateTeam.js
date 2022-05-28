@@ -65,6 +65,7 @@ const CreateTeam = () => {
           nama_tim: createTeamData.nama_tim,
           manager: createTeamData.manager,
           formasis: createTeamData.formasis,
+          user_id: ReactSession.get("user_id"),
         },
         {
           headers: { "Content-Type": "application/json" },
