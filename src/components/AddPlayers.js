@@ -3,12 +3,8 @@ import { Box } from "@mui/system";
 import axios from "axios";
 import React, { useState } from "react";
 import { ReactSession } from "react-client-session";
-import { useNavigate } from "react-router-dom";
-import Footer from "./Footer";
-import { ResponsiveNavBar } from "./Navbar";
 
 const AddPlayers = () => {
-  const nav = useNavigate();
   const positions = [
     {
       value: "GK",
@@ -99,17 +95,11 @@ const AddPlayers = () => {
       )
       .then(function (response) {
         console.log(response.data);
-        // if (ReactSession.get("id_tim") === undefined) {
-        //   console.log("MASIH GAPUNYA TIM");
-        //   nav("/CreateTeam");
-        // } else {
-        //   nav("/TeamProfile");
-        // }
-        //alert("Player successfully added");
+        alert("Player created successfully")
 
       })
       .catch(function (error) {
-        //alert("Can't find your account.");
+        alert("Failed to create player")
         window.location.href = '/LandingPage';
         console.error(error);
       });

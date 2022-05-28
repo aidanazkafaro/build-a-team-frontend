@@ -1,15 +1,7 @@
 import {
   Box,
   Button,
-  FilledInput,
   FormControl,
-  FormHelperText,
-  IconButton,
-  Input,
-  InputAdornment,
-  InputLabel,
-  MenuItem,
-  OutlinedInput,
   TextField,
 } from "@mui/material";
 import axios from "axios";
@@ -74,6 +66,8 @@ const CreateTeam = () => {
       )
       .then(function (response) {
         console.log(response.data);
+        ReactSession.set("nama_tim", response.data.nama_tim);
+        window.location.href = "/TeamProfile";
       })
       .catch(function (error) {
         //alert("Can't find your account.");
@@ -81,14 +75,14 @@ const CreateTeam = () => {
         console.error(error);
       });
 
-      nav("/TeamProfile")
+    nav("/TeamProfile");
   };
 
   return (
     <>
       <ResponsiveNavBar />
-      <div className="h-screen">
-        <h1>Let's create your team!</h1>
+      <div className="h-screen p-20">
+        <h1 className="text-3xl">Let's create your team!</h1>
         <div className=" py-5 pt-10 w-1/2 justify-center">
           <Box sx={{ display: "flex", flexWrap: "wrap" }}>
             <div>
@@ -137,12 +131,7 @@ const CreateTeam = () => {
                   ))}
                 </TextField>
               </FormControl>
-              <Button
-                variant="contained"
-                onClick={onSubmitForm}
-                href="/TeamProfile"
-                sx={{ ml: 2 }}
-              >
+              <Button variant="contained" onClick={onSubmitForm} sx={{ ml: 2 }}>
                 Submit Team
               </Button>
             </div>

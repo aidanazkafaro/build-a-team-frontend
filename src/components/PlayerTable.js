@@ -1,17 +1,9 @@
 import * as React from "react";
-import Table from "@mui/material/Table";
-import TableBody from "@mui/material/TableBody";
-import TableCell from "@mui/material/TableCell";
-import TableContainer from "@mui/material/TableContainer";
-import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
-import Paper from "@mui/material/Paper";
 import { ReactSession } from "react-client-session";
 import axios from "axios";
 
 import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 
 const columns = [
   { field: "nama", headerName: "Nama", width: 140 },
@@ -29,7 +21,13 @@ const columns = [
     type: "number",
     width: 100,
   },
-  { field: "id_pemain", headerName: "ID Pemain", type: "number", width: 90 },
+  {
+    field: "id_pemain",
+    headerName: "ID Pemain",
+    type: "number",
+    width: 90,
+    hide: true,
+  },
   { field: "selected", headerName: "Selected", type: "boolean", width: 90 },
   { field: "posisi_pemain", headerName: "Posisi", type: "string", width: 80 },
   { field: "agility", headerName: "Agility", type: "number", width: 80 },
@@ -50,216 +48,195 @@ const columns = [
 //     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
 // },
 
-export default function PlayerTable({ dataTim }) {
-  const nav = useNavigate();
+export default function PlayerTable( ) {
+  const [selectionModel, setSelectionModel] = React.useState(null);
+  const [showCheckbox, setShowCheckbox] = React.useState(false);
 
-  console.log("MASUK PLAYERTABLE");
-  console.log(dataTim);
+  const [selectedPlayer, setSelectedPlayer] = React.useState([]);
+  const [pageSize, setPageSize] = React.useState(5);
+  const [hasilGetPlayer, setHasilGetPlayer] = React.useState(null);
+  const [hasPlayers, setHasPlayers] = React.useState(false);
 
-  var dataTimArray = [];
-  for (let i = 0; i < dataTim.length; i++) {
-    dataTimArray.push({
-      nama: dataTim[i].nama,
-      umur: dataTim[i].umur,
-      no_punggung: dataTim[i].no_punggung,
-      tinggi: dataTim[i].tinggi,
-      berat_badan: dataTim[i].berat_badan,
-      id_pemain: dataTim[i].id_pemain,
-      selected: dataTim[i].selected,
-      posisi_pemain: dataTim[i].posisi_pemain,
-      agility: dataTim[i].agility,
-      defence: dataTim[i].defence,
-      shooting: dataTim[i].shooting,
-      speed: dataTim[i].speed,
-      passing: dataTim[i].passing,
-      stamina: dataTim[i].stamina,
-      dribbling: dataTim[i].dribbling,
+  React.useEffect(() => {
+    getPlayer();
+  }, []);
+
+  const getPlayer = () => {
+    axios
+    .get(
+      "http://localhost:8000/getplayer",
+      { params: { user_id: ReactSession.get("user_id") } },
+      {
+        headers: { "Content-Type": "application/json" },
+        withCredentials: true,
+      }
+    )
+    .then(function (response) {
+      console.log("GETTING PLAYER DATA FROM SERVER");
+      //PlayerTable(response.data);
+      //hasilGetPlayer = response.data;
+      console.log("HASIL GET PLAYER");
+      console.log(response.data);
+      setHasilGetPlayer(response.data);
+      setHasPlayers(true);
+      if (response.data.length === 0) {
+        setHasPlayers(false);
+      } else {
+        setHasPlayers(true);
+      }
+
+      //console.log(response.data);
+    })
+    .catch(function (error) {
+      // alert("Can't found your team")
+      console.error(error);
     });
   }
 
-  console.log(dataTimArray);
+  console.log("MASUK PLAYERTABLE");
+  var dataTimArray = [];
+
+  const selectToStart = () => {
+    axios
+      .put("http://localhost:8000/setSelectedPlayer", {
+        id_tim: ReactSession.get("id_tim"),
+        playerID: selectedPlayer,
+      })
+      .then(function (response) {
+        console.log("HASIL QUERY SET SELECTED PLAYER");
+        console.log(response.data);
+        //window.location.reload(false);
+        getPlayer();
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+
+  const removeFromStarting = () => {
+    axios
+      .put("http://localhost:8000/unsetselectedplayer", {
+        id_tim: ReactSession.get("id_tim"),
+        playerID: selectedPlayer,
+      })
+      .then(function (response) {
+        console.log("HASIL QUERY UNSET SELECTED PLAYER");
+        console.log(response.data);
+        //window.location.reload(false);
+        getPlayer();
+
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  };
+
+  if ( hasPlayers) {
+    for (let i = 0; i < hasilGetPlayer.length; i++) {
+      dataTimArray.push({
+        nama: hasilGetPlayer[i].nama,
+        umur: hasilGetPlayer[i].umur,
+        no_punggung: hasilGetPlayer[i].no_punggung,
+        tinggi: hasilGetPlayer[i].tinggi,
+        berat_badan: hasilGetPlayer[i].berat_badan,
+        id_pemain: hasilGetPlayer[i].id_pemain,
+        selected: hasilGetPlayer[i].selected,
+        posisi_pemain: hasilGetPlayer[i].posisi_pemain,
+        agility: hasilGetPlayer[i].agility,
+        defence: hasilGetPlayer[i].defence,
+        shooting: hasilGetPlayer[i].shooting,
+        speed: hasilGetPlayer[i].speed,
+        passing: hasilGetPlayer[i].passing,
+        stamina: hasilGetPlayer[i].stamina,
+        dribbling: hasilGetPlayer[i].dribbling,
+      });
+    }
+  }
+
   return (
     <>
-      <div className="grid grid-cols-6 gap-4">
-        <div className="col-start-1 col-end-3">
-          <div className="flex space-x-2 justify-start">
-            <Button
-              variant="contained"
-              // onClick={onSubmitForm}
-              sx={{ ml: 0 }}
-              // onClick={() => {nav("PageAddPlayer")}}
-              href={'PageAddPlayer'}
-            >
+      {/* {console.log("SELECTED PLAYER LENGTH = ", selectedPlayer.length)}
+      {console.log(selectedPlayer)} */}
+      <h1>{ReactSession.get("")}</h1>
+      <div className="grid grid-cols-6 gap-4 my-5">
+        <div className="col-start-1 col-end-5">
+          <div className="flex gap-4 justify-start">
+            <Button variant="contained" sx={{ ml: 0 }} href={"PageAddPlayer"} size="small">
               Add Player
             </Button>
 
-            <button
-              type="button"
-              data-mdb-ripple="true"
-              data-mdb-ripple-color="light"
-              className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-            >
-              Show Selected Pemain
-            </button>
+            <Button variant="contained" sx={{ ml: 0 }} href={"PageAddPlayer"} size="small">
+              Starting XI
+            </Button>
           </div>
         </div>
 
-        <div className="col-start-7">
-          <div>
-            <div className="dropdown relative">
-              <button
-                className="
-          dropdown-toggle
-          px-6
-          py-2.5
-          bg-blue-600
-          text-white
-          font-medium
-          text-xs
-          leading-tight
-          uppercase
-          rounded
-          shadow-md
-          hover:bg-blue-700 hover:shadow-lg
-          focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0
-          active:bg-blue-800 active:shadow-lg active:text-white
-          transition
-          duration-150
-          ease-in-out
-          flex
-          items-center
-          whitespace-nowrap
-        "
-                type="button"
-                id="dropdownMenuButton1"
-                data-bs-toggle="dropdown"
-                aria-expanded="false"
-              >
-                Dropdown button
-                <svg
-                  aria-hidden="true"
-                  focusable="false"
-                  data-prefix="fas"
-                  data-icon="caret-down"
-                  className="w-2 ml-2"
-                  role="img"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 320 512"
+        <div className="col-start-7 ">
+          <div className="flex gap-4 justify-end">
+            <Button
+              variant="outlined"
+              sx={{ ml: 0 }}
+              size="small"
+              onClick={() => {
+                setShowCheckbox(!showCheckbox);
+              }}
+            >
+              EDIT
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-6 gap-4 my-5">
+        <div className="col-start-1 col-end-7">
+          <div className="flex gap-4 justify-end">
+            <div className="col-start-7" hidden={!showCheckbox}>
+              <div className="flex gap-4 justify-end">
+                <Button
+                  variant="contained"
+                  sx={{ ml: 0 }}
+                  onClick={selectToStart}
+                  hidden={true}
+                  size="small"
                 >
-                  <path
-                    fill="currentColor"
-                    d="M31.3 192h257.3c17.8 0 26.7 21.5 14.1 34.1L174.1 354.8c-7.8 7.8-20.5 7.8-28.3 0L17.2 226.1C4.6 213.5 13.5 192 31.3 192z"
-                  ></path>
-                </svg>
-              </button>
-              <ul
-                className="
-          dropdown-menu
-          min-w-max
-          absolute
-          hidden
-          bg-white
-          text-base
-          z-50
-          float-left
-          py-2
-          list-none
-          text-left
-          rounded-lg
-          shadow-lg
-          mt-1
-          hidden
-          m-0
-          bg-clip-padding
-          border-none
-        "
-                aria-labelledby="dropdownMenuButton1"
-              >
-                <li>
-                  <a
-                    className="
-              dropdown-item
-              text-sm
-              py-2
-              px-4
-              font-normal
-              block
-              w-full
-              whitespace-nowrap
-              bg-transparent
-              text-gray-700
-              hover:bg-gray-100
-            "
-                    href="#"
-                  >
-                    Action
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className="
-              dropdown-item
-              text-sm
-              py-2
-              px-4
-              font-normal
-              block
-              w-full
-              whitespace-nowrap
-              bg-transparent
-              text-gray-700
-              hover:bg-gray-100
-            "
-                    href="#"
-                  >
-                    Another action
-                  </a>
-                </li>
-                <li>
-                  <a
-                    className="
-              dropdown-item
-              text-sm
-              py-2
-              px-4
-              font-normal
-              block
-              w-full
-              whitespace-nowrap
-              bg-transparent
-              text-gray-700
-              hover:bg-gray-100
-            "
-                    href="#"
-                  >
-                    Something else here
-                  </a>
-                </li>
-              </ul>
+                  SEND TO STARTING XI
+                </Button>
+                <Button
+                  variant="outlined"
+                  color="error"
+                  sx={{ ml: 0 }}
+                  onClick={removeFromStarting}
+                  hidden={true}
+                  size="small"
+                >
+                  REMOVE FROM STARTING XI
+                </Button>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      <div className="flex space-y-2 justify-end">
-        <button
-          type="button"
-          data-mdb-ripple="true"
-          data-mdb-ripple-color="light"
-          className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
-        >
-          Terapkan
-        </button>
-      </div>
-
-      <div style={{ height: 400, width: "100%" }}>
+      <div className="h-96 w-full">
         <DataGrid
           getRowId={(dataTimArray) => dataTimArray.id_pemain}
           rows={dataTimArray}
           columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5]}
-          checkboxSelection
+          pageSize={pageSize}
+          onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
+          rowsPerPageOptions={[5, 10, 20]}
+          pagination
+          checkboxSelection={showCheckbox}
+          onSelectionModelChange={(newSelectionModel) => {
+            setSelectionModel(newSelectionModel);
+            setSelectedPlayer(newSelectionModel);
+            console.log(selectedPlayer);
+            // if (!selectedPlayer.includes(newSelectionModel)) {
+            //   let lastPlayer = selectedPlayer.length > 1 ? newSelectionModel.pop() : newSelectionModel[0];
+            //   selectedPlayer.push(lastPlayer)
+            // } else if (selectedPlayer.includes(newSelectionModel)) {
+            //   selectedPlayer.filter(newSelectionModel);
+            // }
+          }}
         />
       </div>
     </>

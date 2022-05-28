@@ -9,8 +9,8 @@ import { ReactSession } from "react-client-session";
 
 const SignIn = () => {
   const nav = useNavigate();
-  const [username, setUsername] = useState("tanpatim");
-  const [password, setPassword] = useState("tanpatim");
+  const [username, setUsername] = useState("pepguardiola");
+  const [password, setPassword] = useState("mancity");
   
   useEffect(() => {
     //getSession();

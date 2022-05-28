@@ -1,5 +1,4 @@
-import axios from "axios";
-import { useEffect, useState } from "react";
+
 import { Routes, Route, Link, Navigate } from "react-router-dom";
 import Footer from "../components/Footer";
 import { ResponsiveNavBar } from "../components/Navbar";
