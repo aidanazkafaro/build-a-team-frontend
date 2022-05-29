@@ -3,7 +3,11 @@ import { ReactSession } from "react-client-session";
 import axios from "axios";
 
 import { DataGrid } from "@mui/x-data-grid";
-import { Button } from "@mui/material";
+import {
+  Button, Box,
+  FormControl,
+  TextField,
+} from "@mui/material";
 
 const columns = [
   { field: "nama", headerName: "Nama", width: 140 },
@@ -47,6 +51,29 @@ const columns = [
 //   valueGetter: (params) =>
 //     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
 // },
+
+const formations = [
+  {
+    value: "4-4-2",
+    id: "1",
+  },
+  {
+    value: "4-3-3",
+    id: "2",
+  },
+  {
+    value: "4-5-1",
+    id: "3",
+  },
+  {
+    value: "3-5-2",
+    id: "4",
+  },
+  {
+    value: "5-4-1",
+    id: "5",
+  },
+];
 
 export default function PlayerTable() {
   console.log("MASUK PLAYERTABLE");
@@ -262,11 +289,33 @@ export default function PlayerTable() {
             >
               Starting XI
             </Button>
+
           </div>
+          <FormControl fullWidth sx={{ m: 1 }}>
+            <TextField
+              id="filled-select-currency-native"
+              select
+              label="Formation"
+              sx={{ m: 1, width: "20ch" }}
+              //value={formasis}
+              //onChange={handleChange("formasis")}
+              SelectProps={{
+                native: true,
+              }}
+            // variant="filled"
+            >
+              {formations.map((option) => (
+                <option key={option.id} value={option.value}>
+                  {option.value}
+                </option>
+              ))}
+            </TextField>
+          </FormControl>
         </div>
 
         <div className="col-start-7 ">
           <div className="flex gap-4 justify-end">
+
             <Button
               variant="outlined"
               sx={{ ml: 0 }}
@@ -318,7 +367,7 @@ export default function PlayerTable() {
                 <Button
                   variant="outlined"
                   sx={{ ml: 0 }}
-              
+
                   hidden={true}
                   size="small"
                 >
