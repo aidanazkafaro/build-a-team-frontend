@@ -71,8 +71,9 @@ const AddPlayers = () => {
 
   const onSubmitForm = (e) => {
     e.preventDefault(); //prevent refresh
-    console.log("ID TIM REACT SESSION DI BAWAH");
-    console.log(ReactSession.get("id_tim"));
+    console.log("ID TIM REACT SESSION DI BAWAH")
+    console.log(ReactSession.get("id_tim"))
+    var ID_TIM = ReactSession.get("id_tim")
     axios
       .post(
         "http://localhost:8000/createplayer",
@@ -90,7 +91,7 @@ const AddPlayers = () => {
           stamina: createPlayerData.stamina,
           dribbling: createPlayerData.dribbling,
           posisi: createPlayerData.posisi,
-          id_tim: ReactSession.get("id_tim"),
+          id_tim: ID_TIM,
         },
         {
           headers: { "Content-Type": "application/json" },
