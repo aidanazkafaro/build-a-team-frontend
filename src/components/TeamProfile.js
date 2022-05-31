@@ -10,6 +10,10 @@ const TeamProfile = () => {
   const [idTim, setIdTim] = useState(null);
 
   useEffect(() => {
+    getSession();
+  }, []);
+
+  const getSession = (e) => {
     axios
       .get("http://localhost:8000/login", {
         withCredentials: true,
@@ -21,17 +25,17 @@ const TeamProfile = () => {
         setUsername(response.data.username);
         ReactSession.set("user_id", response.data.user_id);
         ReactSession.set("id_tim", response.data.id_tim);
-        setIdTim(ReactSession.get("id_tim"))
+        setIdTim(ReactSession.get("id_tim"));
         console.log("USER ID PAKE REACT SESSION DI BAWAH");
         console.log(ReactSession.get("user_id"));
       })
-      .catch(function(error){
-        console.log("ERROR GET LOGIN DI TEAM PROFILE")
+      .catch(function (error) {
+        console.log("ERROR GET LOGIN DI TEAM PROFILE");
         console.error(error);
       });
-  }, []);
+  };
 
-  if (!username && !idTim ) {
+  if (!username && !idTim) {
     return (
       <>
         <div className="grid place-items-center h-screen">
@@ -42,6 +46,7 @@ const TeamProfile = () => {
             <span className="visually-hidden"></span>
           </div>
         </div>
+        {getSession()};{" "}
       </>
     );
   }
@@ -49,7 +54,7 @@ const TeamProfile = () => {
   return (
     <>
       <ResponsiveNavBar />
-      <div className="w-full text-left h-fit p-10 mx-auto">
+      <div className="w-full text-left h-fit p-20 mx-auto">
         <h1 className="text-bold text-4xl">
           Welcome, {ReactSession.get("username")}!
         </h1>

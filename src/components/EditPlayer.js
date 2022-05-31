@@ -1,13 +1,15 @@
 import { Button, FormControl, TextField } from "@mui/material";
 import { Box } from "@mui/system";
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { ReactSession } from "react-client-session";
-import Footer from "./Footer";
-import { ResponsiveNavBar } from "./Navbar";
 
-const EditPlayer = ({id_pemain}) => {
+const EditPlayer = () => {
   const positions = [
+    {
+      value: "Select position",
+      id: "0",
+    },
     {
       value: "GK",
       id: "1",
@@ -42,7 +44,7 @@ const EditPlayer = ({id_pemain}) => {
     },
   ];
 
-  const createPlayerJsonFormat = {
+ const updatePlayerJsonFormat = {
     nama: "",
     umur: "",
     no_punggung: "",
@@ -55,40 +57,85 @@ const EditPlayer = ({id_pemain}) => {
     passing: "",
     stamina: "",
     dribbling: "",
-    posisi:"",
-    id_tim:"",
+    posisi: "",
+    id_tim: "",
+   };
+
+  const [updatePlayerData, setUpdatePlayerData] = useState(updatePlayerJsonFormat);
+
+  const [currentPlayerData, setCurrentPlayerData] = useState(null);
+
+  const [hasPlayer, setHasPlayer] = useState(false);
+
+  var playerData = [];
+
+  useEffect(() => {
+    console.log(ReactSession.get("sessionSelectedPlayer"));
+    getPlayer();
+  }, []);
+
+  const getPlayer = () => {
+    console.log(ReactSession.get("sessionSelectedPlayer"));
+    axios
+      .get(
+        "http://localhost:8000/getsingleplayer",
+        { params: { player_id: ReactSession.get("sessionSelectedPlayer") } },
+        {
+          headers: { "Content-Type": "application/json" },
+          withCredentials: true,
+        }
+      )
+      .then(function (response) {
+        console.log("GETTING PLAYER DATA FROM SERVER");
+        console.log("HASIL GET PLAYER");
+        console.log(response.data);
+        setCurrentPlayerData(response.data);
+        playerData = response.data;
+        setHasPlayer(true);
+        if (response.data.length === 0) {
+          setHasPlayer(false);
+        } else {
+          setHasPlayer(true);
+        }
+      })
+      .catch(function (error) {
+        alert("Can't find your players");
+        console.error(error);
+      });
   };
 
-  const [createPlayerData, setCreatePlayerData] = useState(
-    createPlayerJsonFormat
-  );
 
   const handleChange = (prop) => (event) => {
-    setCreatePlayerData({ ...createPlayerData, [prop]: event.target.value });
+    setUpdatePlayerData({ ...updatePlayerData, [prop]: event.target.value });
   };
 
   const onSubmitForm = (e) => {
     e.preventDefault(); //prevent refresh
-    console.log("ID TIM REACT SESSION DI BAWAH")
-    console.log(ReactSession.get("id_tim"))
+    console.log("ID TIM REACT SESSION DI BAWAH");
+    console.log(ReactSession.get("id_tim"));
+    console.log(currentPlayerData[0].id_identitas)
+    console.log(updatePlayerData.nama)
     axios
-      .post(
-        "http://localhost:8000/createplayer",
+      .put(
+        "http://localhost:8000/updatestatistikplayer",
         {
-          nama: createPlayerData.nama,
-          umur: createPlayerData.umur,
-          no_punggung: createPlayerData.no_punggung,
-          tinggi: createPlayerData.tinggi,
-          berat_badan: createPlayerData.berat_badan,
-          agility: createPlayerData.agility,
-          defence: createPlayerData.defence,
-          shooting: createPlayerData.shooting,
-          speed: createPlayerData.speed,
-          passing: createPlayerData.passing,
-          stamina: createPlayerData.stamina,
-          dribbling: createPlayerData.dribbling,
-          posisi: createPlayerData.posisi,
-          id_tim: ReactSession.get("id_tim"),
+
+          id_identitas: currentPlayerData[0].id_identitas,
+          inputNama: updatePlayerData.nama,
+          inputUmur: updatePlayerData.umur,
+          inputTinggi: updatePlayerData.tinggi,
+          inputBeratBadan: updatePlayerData.berat_badan,
+          inputNoPunggung: updatePlayerData.no_punggung,
+          
+          id_statistik: currentPlayerData[0].id_statistik,
+          inputAgility: updatePlayerData.agility,
+          inputDefence: updatePlayerData.defence,
+          inputShooting: updatePlayerData.shooting,
+          inputSpeed: updatePlayerData.speed,
+          inputPassing: updatePlayerData.passing,
+          inputStamina: updatePlayerData.stamina,
+          inputDribbling: updatePlayerData.dribbling,
+
         },
         {
           headers: { "Content-Type": "application/json" },
@@ -97,109 +144,112 @@ const EditPlayer = ({id_pemain}) => {
       )
       .then(function (response) {
         console.log(response.data);
-        alert("Player created successfully")
-        window.location.reload()
-
+        alert("Player updated successfully");
+        window.location.reload();
       })
       .catch(function (error) {
-        alert("Failed to create player")
-        window.location.href = '/LandingPage';
+        alert("Failed to update player");
+        window.location.href = "/LandingPage";
         console.error(error);
       });
   };
 
+  if (!hasPlayer && !currentPlayerData) {
+    return (
+      <>
+        <div className="grid place-items-center h-screen">
+          <div
+            className="spinner-border animate-spin inline-block w-8 h-8 border-4 rounded-full"
+            role="status"
+          >
+            <span className="visually-hidden"></span>
+          </div>
+        </div>
+        {getPlayer()};{" "}
+      </>
+    );
+  }
+
   return (
-    <>      
-        <ResponsiveNavBar />
-      <h1 className="text-2xl my-2 ">
-        Let's add players into your team!
-      </h1>
-      <div className=" py-5 pt-10 w-1/2 justify-center">
+    <>
+      {console.log("Console log didalam return: " + playerData)}
+      {console.log(typeof(currentPlayerData[0].agility))}
+      <h1 className="text-2xl my-2 ">Let's update the player's statistics!</h1>
+      <div className="  w-1/2 justify-center">
         <Box sx={{ display: "flex", flexWrap: "wrap" }}>
           <div>
-          <h1 className="text-xl mt-5">Identity</h1>
-
+            <h1 className="text-xl mt-5">Ability</h1>
             <FormControl fullWidth sx={{ m: 1 }}>
               <TextField
                 label="Nama"
                 id="outlined-start-adornment"
                 sx={{ m: 1, width: "50ch" }}
-                value={createPlayerData.nama}
+                //defaultValue={currentPlayerData[0].nama}
+                value={updatePlayerData.nama}
                 onChange={handleChange("nama")}
-                
-                // InputProps={{
-                //   startAdornment: <InputAdornment position="start">kg</InputAdornment>,
-                // }}
-              />
-            </FormControl>
-            <FormControl fullWidth sx={{ m: 1 }}>
-              <TextField
-                label="Age"
-                id="outlined-start-adornment"
-                sx={{ m: 1, width: "50ch" }}
-                value={createPlayerData.umur}
-                onChange={handleChange("umur")}
-                type='number'
-                // InputProps={{
-                //   startAdornment: <InputAdornment position="start">kg</InputAdornment>,
-                // }}
-              />
-            </FormControl>
-            <FormControl fullWidth sx={{ m: 1 }}>
-              <TextField
-                label="Player Number"
-                id="outlined-start-adornment"
-                sx={{ m: 1, width: "50ch" }}
-                value={createPlayerData.no_punggung}
-                onChange={handleChange("no_punggung")}
-                type='number'
+                type="string"
 
-                // InputProps={{
-                //   startAdornment: <InputAdornment position="start">kg</InputAdornment>,
-                // }}
+          
               />
             </FormControl>
             <FormControl fullWidth sx={{ m: 1 }}>
               <TextField
-                label="Height"
-                id="outlined-start-adornment"
-                sx={{ m: 1, width: "50ch" }}
-                value={createPlayerData.tinggi}
-                onChange={handleChange("tinggi")}
-                type='number'
-
-                // InputProps={{
-                //   startAdornment: <InputAdornment position="start">kg</InputAdornment>,
-                // }}
+              label="Umur"
+              id="outlined-start-adornment"
+              sx={{ m: 1, width: "50ch" }}
+              value={updatePlayerData.umur}
+              onChange={handleChange("umur")}
+              type="number"
+              //defaultValue={currentPlayerData[0].umur}
               />
             </FormControl>
+
             <FormControl fullWidth sx={{ m: 1 }}>
               <TextField
-                label="Weight"
-                id="outlined-start-adornment"
-                sx={{ m: 1, width: "50ch" }}
-                value={createPlayerData.berat_badan}
-                onChange={handleChange("berat_badan")}
-                type='number'
-
-                // InputProps={{
-                //   startAdornment: <InputAdornment position="start">kg</InputAdornment>,
-                // }}
+              label="Tinggi"
+              id="outlined-start-adornment"
+              sx={{ m: 1, width: "50ch" }}
+              value={updatePlayerData.tinggi}
+              onChange={handleChange("tinggi")}
+              type="number"
+              //defaultValue={currentPlayerData[0].tinggi}
               />
             </FormControl>
-            <h1 className="text-xl mt-5">Abiilty</h1>
+
+            <FormControl fullWidth sx={{ m: 1 }}>
+              <TextField
+              label="Berat Badan"
+              id="outlined-start-adornment"
+              sx={{ m: 1, width: "50ch" }}
+              value={updatePlayerData.berat_badan}
+              onChange={handleChange("berat_badan")}
+              type="number"
+              //defaultValue={currentPlayerData[0].berat_badan}
+              />
+            </FormControl>
+
+            <FormControl fullWidth sx={{ m: 1 }}>
+              <TextField
+              label="Nomor Punggung"
+              id="outlined-start-adornment"
+              sx={{ m: 1, width: "50ch" }}
+              value={updatePlayerData.no_punggung}
+              onChange={handleChange("no_punggung")}
+              type="number"
+              //defaultValue={currentPlayerData[0].no_punggung}
+              />
+            </FormControl>
+            
             <FormControl fullWidth sx={{ m: 1 }}>
               <TextField
                 label="Agility"
                 id="outlined-start-adornment"
                 sx={{ m: 1, width: "50ch" }}
-                value={createPlayerData.agility}
+                value={updatePlayerData.agility}
                 onChange={handleChange("agility")}
-                type='number'
+                type="number"
+                //defaultValue={currentPlayerData[0].agility}
 
-                // InputProps={{
-                //   startAdornment: <InputAdornment position="start">kg</InputAdornment>,
-                // }}
               />
             </FormControl>
             <FormControl fullWidth sx={{ m: 1 }}>
@@ -207,9 +257,10 @@ const EditPlayer = ({id_pemain}) => {
                 label="Defence"
                 id="outlined-start-adornment"
                 sx={{ m: 1, width: "50ch" }}
-                value={createPlayerData.defence}
+                value={updatePlayerData.defence}
                 onChange={handleChange("defence")}
-                type='number'
+                type="number"
+                //defaultValue={currentPlayerData[0].defence}
 
                 // InputProps={{
                 //   startAdornment: <InputAdornment position="start">kg</InputAdornment>,
@@ -221,9 +272,10 @@ const EditPlayer = ({id_pemain}) => {
                 label="Stamina"
                 id="outlined-start-adornment"
                 sx={{ m: 1, width: "50ch" }}
-                value={createPlayerData.stamina}
+                value={updatePlayerData.stamina}
                 onChange={handleChange("stamina")}
-                type='number'
+                type="number"
+                //defaultValue={currentPlayerData[0].stamina}
 
                 // InputProps={{
                 //   startAdornment: <InputAdornment position="start">kg</InputAdornment>,
@@ -235,9 +287,10 @@ const EditPlayer = ({id_pemain}) => {
                 label="Passing"
                 id="outlined-start-adornment"
                 sx={{ m: 1, width: "50ch" }}
-                value={createPlayerData.passing}
+                value={updatePlayerData.passing}
                 onChange={handleChange("passing")}
-                type='number'
+                type="number"
+                //defaultValue={currentPlayerData[0].passing}
 
                 // InputProps={{
                 //   startAdornment: <InputAdornment position="start">kg</InputAdornment>,
@@ -249,9 +302,10 @@ const EditPlayer = ({id_pemain}) => {
                 label="Dribbling"
                 id="outlined-start-adornment"
                 sx={{ m: 1, width: "50ch" }}
-                value={createPlayerData.dribbling}
+                value={updatePlayerData.dribbling}
                 onChange={handleChange("dribbling")}
-                type='number'
+                type="number"
+                //defaultValue={currentPlayerData[0].dribbling}
 
                 // InputProps={{
                 //   startAdornment: <InputAdornment position="start">kg</InputAdornment>,
@@ -263,9 +317,10 @@ const EditPlayer = ({id_pemain}) => {
                 label="Speed"
                 id="outlined-start-adornment"
                 sx={{ m: 1, width: "50ch" }}
-                value={createPlayerData.speed}
+                value={updatePlayerData.speed}
                 onChange={handleChange("speed")}
-                type='number'
+                type="number"
+                //defaultValue={currentPlayerData[0].speed}
 
                 // InputProps={{
                 //   startAdornment: <InputAdornment position="start">kg</InputAdornment>,
@@ -277,57 +332,32 @@ const EditPlayer = ({id_pemain}) => {
                 label="Shooting"
                 id="outlined-start-adornment"
                 sx={{ m: 1, width: "50ch" }}
-                value={createPlayerData.shooting}
+                value={updatePlayerData.shooting}
                 onChange={handleChange("shooting")}
-                type='number'
+                type="number"
+                //defaultValue={currentPlayerData[0].shooting}
 
                 // InputProps={{
                 //   startAdornment: <InputAdornment position="start">kg</InputAdornment>,
                 // }}
               />
             </FormControl>
-            <FormControl fullWidth sx={{ m: 1 }}>
-              <TextField
-                id="filled-select-currency-native"
-                select
-                label="Position"
-                sx={{ m: 1, width: "50ch" }}
-                value={createPlayerData.posisi}
-                onChange={handleChange("posisi")}
-                SelectProps={{
-                  native: true,
-                }}
-                helperText="Formation can be changed later on"
-                // variant="filled"
-              >
-                {positions.map((option) => (
-                  <option key={option.id} value={option.value}>
-                    {option.value}
-                  </option>
-                ))}
-              </TextField>
-            </FormControl>
+
             <Button
               variant="contained"
               onClick={onSubmitForm}
               // to="/TeamProfile"
               sx={{ ml: 2 }}
             >
-              Add Player
+              Update Player
             </Button>
-            <Button
-              variant=""
-              href="/TeamProfile"
-              sx={{ ml: 2 }}
-            >
+            <Button variant="" href="/TeamProfile" sx={{ ml: 2 }}>
               Back to Team page
             </Button>
           </div>
         </Box>
       </div>
       <br></br>
-      <Footer />
-
     </>
   );
 };

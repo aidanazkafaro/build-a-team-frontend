@@ -32,7 +32,6 @@ const ShowPlayer = () => {
       //console.log(response.data);
     })
     .catch(function (error) {
-      // alert("Can't found your team")
       console.error(error);
     });
     console.log("i fire once");

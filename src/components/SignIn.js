@@ -5,7 +5,6 @@ import { ResponsiveNavBar } from "./Navbar";
 import axios from "axios";
 import { ReactSession } from "react-client-session";
 
-//axios.defaults.withCredentials = true
 
 const SignIn = () => {
   const nav = useNavigate();

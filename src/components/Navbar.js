@@ -49,13 +49,7 @@ export const ResponsiveNavBar = () => {
   // isi navbar saat user sudah login
   const navLinksLoggedIn = (
     <>
-      {/* <button
-        key="ProfilePage"
-        className="no-underline text-white rounded-lg font-semibold  bg-black border-2 border-black py-2 px-3"
-        href={`ProfilePage`}
-      >
-        Home Page
-      </button> */}
+
       <button
         key="SignOut"
         className="no-underline text-black rounded-lg font-semibold  bg-white border-2 border-black py-2 px-3"

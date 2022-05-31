@@ -6,7 +6,8 @@ import { DataGrid } from "@mui/x-data-grid";
 import { Button } from "@mui/material";
 
 const columns = [
-  { field: "nama", headerName: "Nama", width: 140 },
+
+    { field: "nama", headerName: "Nama", width: 140 },
   { field: "umur", headerName: "Umur", type: "number", width: 80 },
   {
     field: "no_punggung",
@@ -38,15 +39,6 @@ const columns = [
   { field: "stamina", headerName: "Stamina", type: "number", width: 80 },
   { field: "dribbling", headerName: "Dribbling", type: "number", width: 80 },
 ];
-// {
-//   field: 'fullName',
-//   headerName: 'Full name',
-//   description: 'This column has a value getter and is not sortable.',
-//   sortable: false,
-//   width: 160,
-//   valueGetter: (params) =>
-//     `${params.row.firstName || ''} ${params.row.lastName || ''}`,
-// },
 
 export default function PlayerTable() {
   console.log("MASUK PLAYERTABLE");
@@ -56,14 +48,9 @@ export default function PlayerTable() {
   const [showCheckbox, setShowCheckbox] = React.useState(false);
 
   const [selectedPlayer, setSelectedPlayer] = React.useState([]);
-  const [pageSize, setPageSize] = React.useState(5);
+  const [pageSize, setPageSize] = React.useState(20);
   const [hasilGetPlayer, setHasilGetPlayer] = React.useState(null);
-  const [hasilGetSelectedPlayer, setHasilGetSelectedPlayer] =
-    React.useState(null);
   const [hasPlayers, setHasPlayers] = React.useState(false);
-  const [hasSelectedPlayers, setHasSelectedPlayers] = React.useState(false);
-
-  const [ambilSelectedPlayer, setAmbilSelectedPlayer] = React.useState(false);
 
   React.useEffect(() => {
     getPlayer();
@@ -81,8 +68,6 @@ export default function PlayerTable() {
       )
       .then(function (response) {
         console.log("GETTING PLAYER DATA FROM SERVER");
-        //PlayerTable(response.data);
-        //hasilGetPlayer = response.data;
         console.log("HASIL GET PLAYER");
         console.log(response.data);
         setHasilGetPlayer(response.data);
@@ -92,20 +77,15 @@ export default function PlayerTable() {
         } else {
           setHasPlayers(true);
         }
-
-        //console.log(response.data);
       })
       .catch(function (error) {
-        // alert("Can't found your team")
+        alert("Can't find your players");
         console.error(error);
       });
   };
 
   const getSelectedPlayer = () => {
-    // dataTimArray.splice(0, dataTimArray.length)
-    console.log("MASUK GET SELECTED PLAYER");
-    // setHasilGetPlayer(undefined);
-    // console.log(hasilGetPlayer);
+
     axios
       .get(
         "http://localhost:8000/getselectedplayer",
@@ -117,8 +97,6 @@ export default function PlayerTable() {
       )
       .then(function (response) {
         console.log("GETTING SELECTED PLAYER DATA FROM SERVER");
-        //PlayerTable(response.data);
-        //hasilGetPlayer = response.data;
         console.log("HASIL GET SELECTED PLAYER");
         console.log(response.data);
         setHasilGetPlayer(response.data);
@@ -128,11 +106,8 @@ export default function PlayerTable() {
         } else {
           setHasPlayers(true);
         }
-
-        //console.log(response.data);
       })
       .catch(function (error) {
-        // alert("Can't found your team")
         console.error(error);
       });
   };
@@ -146,30 +121,12 @@ export default function PlayerTable() {
       .then(function (response) {
         console.log("HASIL QUERY SET SELECTED PLAYER");
         console.log(response.data);
-        //window.location.reload(false);
         getPlayer();
       })
       .catch(function (error) {
         console.error(error);
       });
   };
-
-  // const updateStatistik = () => {
-  //   axios
-  //     .put("http://localhost:8000/setSelectedPlayer", {
-  //       id_tim: ReactSession.get("id_tim"),
-  //       playerID: selectedPlayer,
-  //     })
-  //     .then(function (response) {
-  //       console.log("HASIL QUERY SET SELECTED PLAYER");
-  //       console.log(response.data);
-  //       //window.location.reload(false);
-  //       getPlayer();
-  //     })
-  //     .catch(function (error) {
-  //       console.error(error);
-  //     });
-  // };
 
   const removeFromStarting = () => {
     axios
@@ -180,7 +137,6 @@ export default function PlayerTable() {
       .then(function (response) {
         console.log("HASIL QUERY UNSET SELECTED PLAYER");
         console.log(response.data);
-        //window.location.reload(false);
         getPlayer();
       })
       .catch(function (error) {
@@ -196,7 +152,6 @@ export default function PlayerTable() {
       .then(function (response) {
         console.log("HASIL QUERY DELETE PLAYER");
         console.log(response.data);
-        //window.location.reload(false);
         getPlayer();
       })
       .catch(function (error) {
@@ -227,8 +182,7 @@ export default function PlayerTable() {
 
   return (
     <>
-      {/* {console.log("SELECTED PLAYER LENGTH = ", selectedPlayer.length)}
-      {console.log(selectedPlayer)} */}
+  
       <h1>{ReactSession.get("")}</h1>
       <div className="grid grid-cols-6 gap-4 my-5">
         <div className="col-start-1 col-end-5">
@@ -243,7 +197,7 @@ export default function PlayerTable() {
             </Button>
 
             <Button
-              variant="contained"
+              variant="outlined"
               sx={{ ml: 0 }}
               size="small"
               onClick={() => {
@@ -253,7 +207,7 @@ export default function PlayerTable() {
               All Players
             </Button>
             <Button
-              variant="contained"
+              variant="outlined"
               sx={{ ml: 0 }}
               size="small"
               onClick={() => {
@@ -261,6 +215,17 @@ export default function PlayerTable() {
               }}
             >
               Starting XI
+            </Button>
+            <Button
+              variant="outlined"
+              sx={{ ml: 0 }}
+              size="small"
+              // onClick={() => {
+              //   getSelectedPlayer();
+              // }}
+              href={"FindStrategy"}
+            >
+              Suggested Strategy
             </Button>
           </div>
         </div>
@@ -318,7 +283,7 @@ export default function PlayerTable() {
                 <Button
                   variant="outlined"
                   sx={{ ml: 0 }}
-              
+                  href={"PageEditPlayer"}
                   hidden={true}
                   size="small"
                 >
@@ -330,6 +295,7 @@ export default function PlayerTable() {
         </div>
       </div>
       <div className="h-96 w-full">
+      
         <DataGrid
           getRowId={(dataTimArray) => dataTimArray.id_pemain}
           rows={dataTimArray}
@@ -337,18 +303,13 @@ export default function PlayerTable() {
           pageSize={pageSize}
           onPageSizeChange={(newPageSize) => setPageSize(newPageSize)}
           rowsPerPageOptions={[5, 10, 20]}
-          pagination
+          pagination={[20]}
           checkboxSelection={showCheckbox}
           onSelectionModelChange={(newSelectionModel) => {
+            ReactSession.set("sessionSelectedPlayer", newSelectionModel[0]);
             setSelectionModel(newSelectionModel);
             setSelectedPlayer(newSelectionModel);
-            console.log(selectedPlayer);
-            // if (!selectedPlayer.includes(newSelectionModel)) {
-            //   let lastPlayer = selectedPlayer.length > 1 ? newSelectionModel.pop() : newSelectionModel[0];
-            //   selectedPlayer.push(lastPlayer)
-            // } else if (selectedPlayer.includes(newSelectionModel)) {
-            //   selectedPlayer.filter(newSelectionModel);
-            // }
+            console.log(newSelectionModel);
           }}
         />
       </div>

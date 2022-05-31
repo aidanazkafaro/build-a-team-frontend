@@ -1,9 +1,4 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  TextField,
-} from "@mui/material";
+import { Box, Button, FormControl, TextField } from "@mui/material";
 import axios from "axios";
 import React, { useState } from "react";
 import { ReactSession } from "react-client-session";
@@ -14,6 +9,10 @@ import { ResponsiveNavBar } from "../components/Navbar";
 const CreateTeam = () => {
   const nav = useNavigate();
   const formations = [
+    {
+      value: "Select formation",
+      id: "0",
+    },
     {
       value: "4-4-2",
       id: "1",
@@ -69,8 +68,6 @@ const CreateTeam = () => {
         window.location.href = "/TeamProfile";
       })
       .catch(function (error) {
-        //alert("Can't find your account.");
-
         console.error(error);
       });
 
@@ -92,9 +89,6 @@ const CreateTeam = () => {
                   sx={{ m: 1, width: "50ch" }}
                   value={createTeamData.nama_tim}
                   onChange={handleChange("nama_tim")}
-                  // InputProps={{
-                  //   startAdornment: <InputAdornment position="start">kg</InputAdornment>,
-                  // }}
                 />
               </FormControl>
               <FormControl fullWidth sx={{ m: 1 }}>
@@ -104,9 +98,6 @@ const CreateTeam = () => {
                   sx={{ m: 1, width: "50ch" }}
                   value={createTeamData.manager}
                   onChange={handleChange("manager")}
-                  // InputProps={{
-                  //   startAdornment: <InputAdornment position="start">kg</InputAdornment>,
-                  // }}
                 />
               </FormControl>
               <FormControl fullWidth sx={{ m: 1 }}>
@@ -121,7 +112,6 @@ const CreateTeam = () => {
                     native: true,
                   }}
                   helperText="Formation can be changed later on"
-                  // variant="filled"
                 >
                   {formations.map((option) => (
                     <option key={option.id} value={option.value}>

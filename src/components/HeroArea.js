@@ -1,7 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-// import heroBackground from '../assets/img/hero-bg.jpg'
-// components
 
 export default function HeroArea() {
   return (

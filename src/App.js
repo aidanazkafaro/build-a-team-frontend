@@ -1,19 +1,18 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Index from "./pages/index";
 import "./App.css";
-import ProfilePage from "./pages/ProfilePage";
 import React, { useState } from "react";
 import ProtectedRoute from "./ProtectedRoute";
 import SignUp from "./components/SignUp";
 import SignIn from "./components/SignIn";
 import TeamProfile from "./components/TeamProfile";
-import EditPlayer from "./components/EditPlayer";
 import { ReactSession } from "react-client-session";
 import LandingPage from "./pages/LandingPage";
 import CreateTeam from "./pages/CreateTeam";
-import AddPlayers from "./components/AddPlayers";
 import PageAddPlayer from "./pages/PageAddPlayer";
 import ShowPlayer from "./pages/ShowPlayer";
+import PageEditPlayer from "./pages/PageEditPlayer";
+import FindStrategy from "./components/FindStrategy";
 
 ReactSession.setStoreType("localStorage");
 export const UserContext = React.createContext(false);
@@ -51,14 +50,6 @@ function App() {
           }
         />
         <Route
-          path="/ProfilePage"
-          element={
-            <ProtectedRoute>
-              <ProfilePage />
-            </ProtectedRoute>
-          }
-        />
-        <Route
           path="/teamProfile"
           element={
             <ProtectedRoute>
@@ -67,10 +58,16 @@ function App() {
           }
         />
         <Route
-          path="/EditPlayer"
+          path="/FindStrategy"
+          element={
+              <FindStrategy />
+          }
+        />
+        <Route
+          path="/PageEditPlayer"
           element={
             <ProtectedRoute>
-              <EditPlayer />
+              <PageEditPlayer />
             </ProtectedRoute>
           }
         />
