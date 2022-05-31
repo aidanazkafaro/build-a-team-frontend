@@ -63,6 +63,10 @@ export default function FindStrategy() {
   };
   const formations = [
     {
+      value: "Select strategy",
+      id: "0",
+    },
+    {
       value: "4-4-2",
       id: "1",
     },
@@ -257,6 +261,7 @@ export default function FindStrategy() {
             }}
             helperText="Try different formations"
           >
+            <option value={"0-0-0"}>Select Formation</option>
             <option value={"4-4-2"}>4-4-2</option>
             <option value={"4-3-3"}>4-3-3</option>
             <option value={"4-5-1"}>4-5-1</option>

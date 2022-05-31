@@ -255,26 +255,7 @@ export default function PlayerTable() {
               Suggested Strategy
             </Button>
           </div>
-          <FormControl fullWidth sx={{ m: 1 }}>
-            <TextField
-              id="filled-select-currency-native"
-              select
-              label="Formation"
-              sx={{ m: 1, width: "20ch" }}
-              //value={formasis}
-              //onChange={handleChange("formasis")}
-              SelectProps={{
-                native: true,
-              }}
-            // variant="filled"
-            >
-              {formations.map((option) => (
-                <option key={option.id} value={option.value}>
-                  {option.value}
-                </option>
-              ))}
-            </TextField>
-          </FormControl>
+
         </div>
 
         <div className="col-start-7 ">
